@@ -13,7 +13,7 @@ var config = require('./config');
 var app = express();
 app.set('superSecret', config.superSecret);
 
-mongoose.connect('mongodb://admin:admin@ds117913.mlab.com:17913/android9-gxtg',
+mongoose.connect('mongodb://admin:admin@ds129183.mlab.com:29183/portablept',
 { useMongoClient: true });
 
 
@@ -70,11 +70,29 @@ apiRoutes.post('/register', function(req, res) {
   var body = req.body;
   var username = body.username;
   var password = body.password;
+  var id= body.id ,
+  var imgAvata=body.img_Avata,
+  var firstName=body.first_Name,
+  var lastName=body.last_Name,
+  var email= body.email,
+  var gender= body.gender,
+  var birthday=body.birthday,
+  var location=body.location,
+  var phoneNumber = body.phone_Number
 
-  var saveUser = function(username, password) {
+  var saveUser = function(username, password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber) {
   var user = new User({
     username: username,
-    password: bcrypt.hashSync(password, 10) // TODO
+    password: bcrypt.hashSync(password, 10), // TODO
+    id:id,
+    img_Avata: imgAvata,
+    firstName: firstName,
+    last_Name:lastName,
+    email: email,
+    gender: gender,
+    birthday: birthday,
+    location:location,
+    phoneNumber: phoneNumber
   });
 
   user.save(function(err, saveUser) {
@@ -121,7 +139,6 @@ apiRoutes.use(function(req, res, next) {
     })
   }
 });
-
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
