@@ -70,24 +70,24 @@ apiRoutes.post('/register', function(req, res) {
   var body = req.body;
   var username = body.username;
   var password = body.password;
-  var id= body.id ,
-  var imgAvata=body.img_Avata,
-  var firstName=body.first_Name,
-  var lastName=body.last_Name,
-  var email= body.email,
-  var gender= body.gender,
-  var birthday=body.birthday,
-  var location=body.location,
-  var phoneNumber = body.phone_Number
+  var id= body.id;
+  var imgAvata=body.imgAvata;
+  var firstName=body.firstName;
+  var lastName=body.lastName;
+  var email= body.email;
+  var gender= body.gender;
+  var birthday=body.birthday;
+  var location=body.location;
+  var phoneNumber = body.phoneNumber;
 
   var saveUser = function(username, password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber) {
   var user = new User({
     username: username,
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
-    img_Avata: imgAvata,
+    imgAvata: imgAvata,
     firstName: firstName,
-    last_Name:lastName,
+    lastName:lastName,
     email: email,
     gender: gender,
     birthday: birthday,
