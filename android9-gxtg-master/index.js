@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 
 var Hottie = require('./models/hottie');
 var User = require('./models/user');
+var Pack = require('./models/pack');
 var config = require('./config');
 
 var app = express();
@@ -42,10 +43,10 @@ var apiRoutes = express.Router();
 
 apiRoutes.post('/login', (req, res) => {
   var body = req.body;
-  var username = body.username; // hieu
+  var username = body.phoneNumber; // hieu
   var password = body.password;
 
-  User.findOne({username: username}, (err, user) => {
+  User.findOne({phoneNumber: phoneNumber}, (err, user) => {
     if (err) {
       res.json({success: 0, message: "Database error, could not find user", err: err});
     } else {
@@ -66,9 +67,58 @@ apiRoutes.post('/login', (req, res) => {
   });
 });
 
+
+apiRoutes.post('/add-pack', function(req, res) {
+  var body = req.body;
+  var phoneNumber = body.phoneNumber;
+  var purpose= body.purpose;
+  var packName=body.packName;
+  var coach=body.coach;
+  var price=body.price;
+
+  var savePack = function( phoneNumber,purpose,packName,coach,price) {
+  var pack = new Pack({
+    phoneNumber:phoneNumber,
+    purpose:purpose,
+    packName:packName,
+    coach:coach,
+    price:price,
+
+  });
+
+  pack.save(function(err, savePack) {
+    if (err) {
+      res.json({
+        success: 0,
+        message: 'Saved data failed'
+      });
+    } else {
+      res.json({
+        success: 1,
+        message: 'Saved data OK',
+        data: _.pick(savePack, ['phoneNumber', '_id', '__v'])
+      });
+    }
+  });
+  };
+
+  Pack.findOne({packName: packName}, function(err, user) {
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find pack"});
+    } else {
+      if(user) {
+        res.json({success: 0, message: "Register failed, duplicate Pack"});
+      } else {
+        savePack(phoneNumber,purpose,packName,coach,price);
+      }
+    }
+  });
+});
+
+
+
 apiRoutes.post('/register', function(req, res) {
   var body = req.body;
-  var username = body.username;
   var password = body.password;
   var id= body.id;
   var imgAvata=body.imgAvata;
@@ -79,10 +129,11 @@ apiRoutes.post('/register', function(req, res) {
   var birthday=body.birthday;
   var location=body.location;
   var phoneNumber = body.phoneNumber;
+  var role = body.role;
 
-  var saveUser = function(username, password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber) {
+
+  var saveUser = function( password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber,role) {
   var user = new User({
-    username: username,
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
     imgAvata: imgAvata,
@@ -92,7 +143,8 @@ apiRoutes.post('/register', function(req, res) {
     gender: gender,
     birthday: birthday,
     location:location,
-    phoneNumber: phoneNumber
+    phoneNumber: phoneNumber,
+    role:role
   });
 
   user.save(function(err, saveUser) {
@@ -105,20 +157,20 @@ apiRoutes.post('/register', function(req, res) {
       res.json({
         success: 1,
         message: 'Saved data OK',
-        data: _.pick(saveUser, ['username', '_id', '__v'])
+        data: _.pick(saveUser, ['phoneNumber', '_id', '__v'])
       });
     }
   });
   };
 
-  User.findOne({username: username}, function(err, user) {
+  User.findOne({phoneNumber: phoneNumber}, function(err, user) {
     if (err) {
       res.json({success: 0, message: "Database error, could not find user"});
     } else {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser(username, password);
+        saveUser( password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber,role);
       }
     }
   });
@@ -127,7 +179,7 @@ apiRoutes.post('/register', function(req, res) {
 apiRoutes.use(function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   if (!token) {
-    res.json({success: 0, message: "Token not provided"});
+    res.json({success: 0, message: "Token not provided deo"});
   } else {
     jwt.verify(token, app.get('superSecret'), function(err, decodedUser) {
         if (err) {
