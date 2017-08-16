@@ -116,7 +116,7 @@ apiRoutes.post('/add-pack', function(req, res) {
     }
   });
 });
-apiRoutes.get('/get-pack-add',function(req, res){
+app.get('/get-pack-add',function(req, res){
   Pack.find({},function(err,user){
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
