@@ -116,7 +116,7 @@ apiRoutes.post('/add-pack', function(req, res) {
     }
   });
 });
-app.get('/get-pack-add',function(req, res){
+apiRoutes.get('/get-pack-add',function(req, res){
   Pack.find({},function(err,user){
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
@@ -144,7 +144,7 @@ apiRoutes.post('/register', function(req, res) {
   var role = body.role;
 
 
-  var saveUser = function( password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber,role) {
+  var saveUser = function( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role) {
   var user = new User({
     password: bcrypt.hashSync(password, 10), // TODO
     id:id,
@@ -182,7 +182,7 @@ apiRoutes.post('/register', function(req, res) {
       if(user) {
         res.json({success: 0, message: "Register failed, duplicate user"});
       } else {
-        saveUser( password,id,imgAvata,first_Name,lastName,email,gender,birthday,location,phoneNumber,role);
+        saveUser( password,id,imgAvata,firstName,lastName,email,gender,birthday,location,phoneNumber,role);
       }
     }
   });
@@ -209,7 +209,7 @@ app.get('/', function(request, response) {
 
 app.get('/api/testhash', function(req, res) {
   var hash = bcrypt.hashSync('hieuhuhong', 10);
-  res.json({hash: hash});
+  res.json();
 });
 
 app.post('/api/testhash', function(req, res) {
