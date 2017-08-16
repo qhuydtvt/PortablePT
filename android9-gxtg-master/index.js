@@ -75,14 +75,16 @@ apiRoutes.post('/add-pack', function(req, res) {
   var packName=body.packName;
   var coach=body.coach;
   var price=body.price;
+  var duration=body.duration;
 
-  var savePack = function( phoneNumber,purpose,packName,coach,price) {
+  var savePack = function( phoneNumber,purpose,packName,coach,price,duration) {
   var pack = new Pack({
     phoneNumber:phoneNumber,
     purpose:purpose,
     packName:packName,
     coach:coach,
     price:price,
+    duration:duration,
 
   });
 

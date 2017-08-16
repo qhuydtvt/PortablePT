@@ -7,6 +7,7 @@ var packSchema = new Schema({
     purpose:String,
     coach:String,
     price:String,
+    duration:String
   });
 
 module.exports = mongoose.model('Pack', packSchema);
