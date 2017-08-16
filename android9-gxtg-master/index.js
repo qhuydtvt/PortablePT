@@ -102,17 +102,27 @@ apiRoutes.post('/add-pack', function(req, res) {
   });
   };
 
-  Pack.findOne({packName: packName}, function(err, user) {
+  Pack.findOne({packName: packName,phoneNumber:phoneNumber}, function(err, user) {
     if (err) {
       res.json({success: 0, message: "Database error, could not find pack"});
     } else {
       if(user) {
-        res.json({success: 0, message: "Register failed, duplicate Pack"});
+        res.json({success: 0, message: "Register failed, duplicate Packdádasda"});
       } else {
         savePack(phoneNumber,purpose,packName,coach,price);
       }
     }
   });
+});
+apiRoutes.get('/get-pack-add',function(req, res){
+  Pack.find({},function(err,user){
+    if (err) {
+      res.json({success: 0, message: "Database error, could not find pack"});
+    } else {
+        res.send(user);
+      }
+  });
+
 });
 
 
